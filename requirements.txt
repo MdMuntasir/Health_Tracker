@@ -1,0 +1,9 @@
+fastapi
+mangum
+boto3
+PyJWT
+passlib[bcrypt]
+python-dotenv
+google-generativeai
+pydantic
+uvicorn
