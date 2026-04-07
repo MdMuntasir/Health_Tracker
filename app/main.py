@@ -1,11 +1,12 @@
 from fastapi import FastAPI
-from app.routes import auth, workout
+from app.routes import auth, workout, nutrition
 import uvicorn
 
 app = FastAPI(title="Health Tracker API")
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(workout.router, prefix="/workouts", tags=["workouts"])
+app.include_router(nutrition.router, prefix="/nutrition", tags=["nutrition"])
 
 @app.get("/")
 def root():
