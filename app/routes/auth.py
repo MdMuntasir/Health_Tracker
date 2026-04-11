@@ -1,6 +1,6 @@
 import uuid
 from fastapi import APIRouter, HTTPException, Depends
-from passlib.hash import bcrypt
+import bcrypt
 from app.models.user import UserRegister, UserLogin
 from app.services.db_service import put_item, get_item, get_user_by_email
 from app.utils.jwt import create_token, get_current_user
@@ -17,7 +17,7 @@ def register(body: UserRegister):
         "sk": "PROFILE",
         "email": body.email,
         "name": body.name,
-        "password": bcrypt.hash(body.password),
+        "password": bcrypt.hashpw(body.password.encode(), bcrypt.gensalt()).decode(),
     }
     put_item(user)
     token = create_token(user_id)
@@ -26,7 +26,7 @@ def register(body: UserRegister):
 @router.post("/login")
 def login(body: UserLogin):
     user = get_user_by_email(body.email)
-    if not user or not bcrypt.verify(body.password, user["password"]):
+    if not user or not bcrypt.checkpw(body.password.encode(), user["password"].encode()):
         raise HTTPException(status_code=401, detail="invalid credentials")
     token = create_token(user["user_id"])
     return {"access_token": token, "user": {k: v for k, v in user.items() if k not in ("password", "sk")}}
