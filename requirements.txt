@@ -4,6 +4,6 @@ boto3
 PyJWT
 bcrypt
 python-dotenv
-google-generativeai
+google-genai
 pydantic
 uvicorn

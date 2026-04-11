@@ -1,16 +1,20 @@
-import google.generativeai as genai
+from google import genai
 from app.config import GEMINI_API_KEY
 
-genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
+client = genai.Client(api_key=GEMINI_API_KEY)
+MODEL = "gemini-2.0-flash"
+
+def _generate(prompt):
+    response = client.models.generate_content(model=MODEL, contents=prompt)
+    return response.text
 
 def generate_workout_plan(goal, fitness_level, recent_activity):
     prompt = f"Create a workout plan for someone with goal: {goal}, fitness level: {fitness_level}, recent activity: {recent_activity}."
-    return model.generate_content(prompt).text
+    return _generate(prompt)
 
 def generate_diet_plan(calorie_goal, protein_g, carbs_g, fat_g):
     prompt = f"Create a diet plan for: {calorie_goal} calories, {protein_g}g protein, {carbs_g}g carbs, {fat_g}g fat per day."
-    return model.generate_content(prompt).text
+    return _generate(prompt)
 
 def generate_weekly_insights(summary):
     prompt = (
@@ -20,8 +24,8 @@ def generate_weekly_insights(summary):
         f"avg sleep {summary.get('avg_sleep')} hours, "
         f"avg steps {summary.get('avg_steps')}."
     )
-    return model.generate_content(prompt).text
+    return _generate(prompt)
 
 def chat(user_message):
     prompt = f"You are a health assistant. User says: {user_message}"
-    return model.generate_content(prompt).text
+    return _generate(prompt)

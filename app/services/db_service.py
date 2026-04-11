@@ -1,5 +1,6 @@
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
+from decimal import Decimal
 from app.config import AWS_REGION, TABLE_NAME
 
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
@@ -7,8 +8,17 @@ dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 def get_table():
     return dynamodb.Table(TABLE_NAME)
 
+def _floats_to_decimals(obj):
+    if isinstance(obj, float):
+        return Decimal(str(obj))
+    if isinstance(obj, dict):
+        return {k: _floats_to_decimals(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_floats_to_decimals(v) for v in obj]
+    return obj
+
 def put_item(item):
-    get_table().put_item(Item=item)
+    get_table().put_item(Item=_floats_to_decimals(item))
 
 def get_item(user_id, sk):
     response = get_table().get_item(Key={"user_id": user_id, "sk": sk})
