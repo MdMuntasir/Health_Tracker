@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
-from app.routes import auth, workout, nutrition, metrics, goals, ai
+from app.routes import auth, workout, nutrition, metrics, goals, ai, reminders, reports
 import uvicorn
 
 app = FastAPI(title="Health Tracker API")
@@ -19,6 +19,8 @@ app.include_router(nutrition.router, prefix="/nutrition", tags=["nutrition"])
 app.include_router(metrics.router, prefix="/metrics", tags=["metrics"])
 app.include_router(goals.router, prefix="/goals", tags=["goals"])
 app.include_router(ai.router, prefix="/ai", tags=["ai"])
+app.include_router(reminders.router, prefix="/reminders", tags=["reminders"])
+app.include_router(reports.router, prefix="/reports", tags=["reports"])
 
 @app.get("/")
 def root():

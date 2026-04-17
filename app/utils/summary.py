@@ -1,9 +1,13 @@
 from datetime import datetime, timedelta
 from app.services.db_service import query_items
 
-def get_weekly_summary(user_id, week_start):
-    start = datetime.strptime(week_start, "%Y-%m-%d")
-    dates = {(start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)}
+def get_summary_for_range(user_id, start_date, end_date):
+    start = datetime.strptime(start_date, "%Y-%m-%d")
+    end = datetime.strptime(end_date, "%Y-%m-%d")
+    dates = {
+        (start + timedelta(days=i)).strftime("%Y-%m-%d")
+        for i in range((end - start).days + 1)
+    }
 
     nutrition = [n for n in query_items(user_id, "NUTRITION#") if n.get("date") in dates]
     workouts = [w for w in query_items(user_id, "WORKOUT#") if w.get("date") in dates]
@@ -16,8 +20,15 @@ def get_weekly_summary(user_id, week_start):
 
     return {
         "avg_calories": avg_calories,
+        "workouts_completed": len(workouts),
         "total_workouts": len(workouts),
         "avg_sleep": avg_sleep,
         "avg_steps": avg_steps,
         "avg_weight": avg_weight,
     }
+
+
+def get_weekly_summary(user_id, week_start):
+    start = datetime.strptime(week_start, "%Y-%m-%d").date()
+    end = start + timedelta(days=6)
+    return get_summary_for_range(user_id, start.isoformat(), end.isoformat())
