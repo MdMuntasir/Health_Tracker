@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 venv/
 *.md
+!README.md
 *.egg-info/
 dist/
 .DS_Store
