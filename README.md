@@ -2,8 +2,6 @@
 
 A REST API for tracking personal health data — workouts, nutrition, body metrics, goals, and reminders — with AI-powered recommendations via Google Gemini.
 
-**Live:** https://4n6s34wjkxz643aru7v3wvdur40jqfbl.lambda-url.ap-south-1.on.aws/
-
 ## Stack
 
 - **FastAPI** — API framework
