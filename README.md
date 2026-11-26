@@ -20,7 +20,7 @@ A REST API for tracking personal health data — workouts, nutrition, body metri
 | `/goals` | Goal setting and progress |
 | `/reminders` | Health reminders |
 | `/reports` | Analytics and reports |
-| `/ai` | AI-generated workout plans, diet tips, and insights |
+| `/ai` | AI-generated workout plans, diet tips, insights, and persistent chat |
 
 ## Setup
 

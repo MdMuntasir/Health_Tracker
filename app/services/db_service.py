@@ -20,8 +20,11 @@ def _floats_to_decimals(obj):
 def put_item(item):
     get_table().put_item(Item=_floats_to_decimals(item))
 
-def get_item(user_id, sk):
-    response = get_table().get_item(Key={"user_id": user_id, "sk": sk})
+def get_item(user_id, sk, consistent_read=False):
+    response = get_table().get_item(
+        Key={"user_id": user_id, "sk": sk},
+        ConsistentRead=consistent_read,
+    )
     return response.get("Item")
 
 def query_items(user_id, sk_prefix):
